@@ -1,0 +1,21 @@
+/* ETC */
+*lib*
+*.Archive.*
+
+/* IDE */
+.vscode
+.DS_Store
+.idea
+
+/* Directory */
+node_modules
+dist/
+archive/
+
+docs
+tmp
+coverage
+
+/* File */
+newrelic_agent.log
+jest.config.js
