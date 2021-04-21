@@ -1,45 +1,110 @@
 export class ApplicationConfig {
-  static dbName = process.env.NAME || 'everywear';
+  private static dbName = process.env.NAME || 'everywhere';
 
-  static user = process.env.USER || 'admin';
+  private static user = process.env.dbUser || 'admin';
 
-  static password = process.env.PASSWORD || 'everywear2021!@';
+  private static password = process.env.PASSWORD || 'tmflfkd1!';
 
-  static dialect = process.env.DIALECT || 'mysql';
+  private static dialect = process.env.DIALECT || 'mysql';
 
-  static timezone = process.env.TIMEZONE || 'Asia/Seoul';
+  public static S3FilesPath = process.env.S3_FILES_PATH || 'files';
 
-  static read = process.env.READ;
+  public static S3Bucket = process.env.S3_BUCKET || 'everywear-image';
 
-  static write = process.env.WRITE;
+  private static timezone = process.env.TIMEZONE || 'Asia/Seoul';
 
-  static charset = process.env.CHARSET || 'utf8';
+  private static read = process.env.READ || 'everywhere-dev.cond05qp242q.ap-northeast-2.rds.amazonaws.com';
 
-  static poolMin = process.env.POOL_MIN || 0;
+  private static write = process.env.WRITE || 'everywhere-dev.cond05qp242q.ap-northeast-2.rds.amazonaws.com' ;
 
-  static poolMax = process.env.POOL_MAX || 0;
+  private static charset = process.env.CHARSET || 'utf8';
 
-  static dbNameTest = process.env.NAME || 'everywear';
+  private static poolMin = process.env.POOL_MIN || 0;
 
-  static userTest = process.env.USER || 'admin';
+  private static poolMax = process.env.POOL_MAX || 0;
 
-  static passwordTest = process.env.PASSWORD || 'everywear2021!@';
+  private static dbNameTest = process.env.NAME || 'everywear';
 
-  static dialectTest = process.env.DIALECT || 'mysql';
+  private static userTest = process.env.USER || 'admin';
 
-  static timezoneTest = process.env.TIMEZONE || 'Asia/Seoul';
+  private static passwordTest = process.env.PASSWORD || 'everywear2021!@';
 
-  static readTest = process.env.READ;
+  private static dialectTest = process.env.DIALECT || 'mysql';
 
-  static writeTest = process.env.WRITE;
+  private static timezoneTest = process.env.TIMEZONE || 'Asia/Seoul';
 
-  static charsetTest = process.env.CHARSET || 'utf8';
+  private static readTest = process.env.READ;
 
-  static poolMinTest = process.env.POOL_MIN || 0;
+  private static writeTest = process.env.WRITE;
 
-  static poolMaxTest = process.env.POOL_MAX || 0;
+  private static charsetTest = process.env.CHARSET || 'utf8';
 
-  static port = process.env.port || 3000;
+  private static poolMinTest = process.env.POOL_MIN || 0;
+
+  private static poolMaxTest = process.env.POOL_MAX || 0;
+
+  private static port = process.env.port || 3000;
+
+  private static jwtSecret = process.env.jwtSecret || 'everywear';
+
+  private static mailAddress = process.env.MailAddress || 'everywear33@gmail.com';
+
+  private static mailPass = process.env.MailPass || 'teameverywear2021';
+
+  private static randomPasswordLength = 20;
+
+  private static mailHost = 'smtp.gmail.com';
+
+  private static mailService = 'gmail';
+
+  private static mailPort = '587';
+
+  private static awsAccessKey = process.env.AWS_ACCESS_KEY || 'AKIAVZGJ7YYKYR2KAEEP';
+
+  private static awsSecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY || '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';
+
+  static getS3Bucket() {
+    return this.S3Bucket;
+  }
+
+  static getS3FilePath() {
+    return this.S3FilesPath;
+  }
+
+  static getAwsKey() {
+    return {
+      accessKey: this.awsAccessKey,
+      secretKey: this.awsSecretAccessKey,
+    };
+  }
+
+  static getMailHost() {
+    return this.mailHost;
+  }
+
+  static getMailService() {
+    return this.mailService;
+  }
+
+  static getMailPort() {
+    return this.mailPort;
+  }
+
+  static getRandomPasswordLength() {
+    return this.randomPasswordLength;
+  }
+
+  static getMailAddress() {
+    return this.mailAddress;
+  }
+
+  static getMailPassword() {
+    return this.mailPass;
+  }
+
+  static getJwtSecret() {
+    return this.jwtSecret;
+  }
 
   static getDBConfig() {
     return {

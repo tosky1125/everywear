@@ -2,7 +2,7 @@ import { Knex, knex } from 'knex';
 import knexConfig from './knexfile';
 
 export class QueryExecutor {
-  static instance : QueryExecutor;
+  static instance : QueryExecutor = new QueryExecutor();
 
   private connection: Knex;
 
@@ -13,7 +13,7 @@ export class QueryExecutor {
   }
 
   constructor() {
-    this.connection = knex(knexConfig().test);
+    this.connection = knex(knexConfig().development);
     this.readConnection = this.connection;
   }
 

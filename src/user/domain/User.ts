@@ -1,6 +1,7 @@
 import { Gender } from '../../infra/enum/Gender';
 import { BodyType } from '../../infra/enum/BodyType';
 import { FaceType } from '../../infra/enum/FaceType';
+import { SkinType } from '../../infra/enum/SkinType';
 
 export class User {
   private _mail : string;
@@ -11,20 +12,26 @@ export class User {
 
   private _name : string;
 
-  private _birthday : number;
+  private _birthday : Date;
 
   private _bodyType : BodyType;
 
   private _faceType : FaceType;
+
+  private _skinType : SkinType;
+
+  private _apple: number;
 
   constructor(
     mail: string,
     password : string,
     gender: Gender,
     name : string,
-    birthday : number,
+    birthday : Date,
     bodyType : BodyType,
     faceType : FaceType,
+    skinType : SkinType,
+    apple : number,
   ) {
     this._mail = mail;
     this._password = password;
@@ -33,10 +40,28 @@ export class User {
     this._birthday = birthday;
     this._bodyType = bodyType;
     this._faceType = faceType;
+    this._skinType = skinType;
+    this._apple = apple;
+  }
+
+  addApple(number:number) : void {
+    this._apple += number;
+  }
+
+  useApple(number?:number) : void {
+    this._apple -= number || 1;
+  }
+
+  get apple() : number {
+    return this._apple;
   }
 
   get mail(): string {
     return this._mail;
+  }
+
+  get skinType(): SkinType {
+    return this._skinType;
   }
 
   get password(): string {
@@ -51,7 +76,7 @@ export class User {
     return this._name;
   }
 
-  get birthday(): number {
+  get birthday(): Date {
     return this._birthday;
   }
 

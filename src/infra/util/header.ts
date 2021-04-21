@@ -17,6 +17,7 @@ export default function () {
   return (request : Request, response: Response, next : any) => {
     Object.keys(map).forEach((key, index) => {
       if (index) {
+        // @ts-ignore
         setheader(response, key, map[key]);
       } else {
         setheader(response, key, request.get('Origin') ? request.get('Origin') : '*');
