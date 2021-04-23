@@ -25,9 +25,10 @@ class FileController extends Controller {
   async fileCreate(req:Request, res: Response): Promise<void> {
     const service = new UploadFileService();
     try {
-      await service.execute(req);
+      const data = await service.execute(req);
       res.status(StatusCode.Created).json({
         result: ResponseResult.Success,
+        data,
       });
     } catch (e) {
       if (e instanceof FileDBInsertError) {

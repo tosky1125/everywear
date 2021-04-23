@@ -6,6 +6,7 @@ import { UserRepository } from '../../user/repository/UserRepository';
 import JwtTokenGenerator from './JwtGenerator';
 import { ApplicationConfig } from '../ApplicationConfig';
 import { UserMapper } from '../../user/mapper/UserMapper';
+import { User } from '../../user/domain/User';
 
 const jwtOpts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -45,7 +46,29 @@ passport.use('kakao', new KakaoStrategy({
         User.userId = t1.userId
       `));
   if (!user) {
-    return done(null, { exist: false, provider: profile.provider, oAuthId: profile.id });
+    await conn('everywear_user').insert({ provider: profile.provider, oAuthId: profile.id });
+    const newUser = new User(null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      profile.id,
+      profile.provider);
+    return done(null, {
+      ...newUser,
+      token: JwtTokenGenerator.get({
+        name: user.name,
+        faceType: user.faceType,
+        skinType: user.skinType,
+        bodyType: user.bodyType,
+        mail: user.mail,
+        apple: user.apple,
+      }),
+    });
   }
   user = UserMapper.toService(user);
   return done(null, {

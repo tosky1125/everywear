@@ -2,8 +2,17 @@ import { Gender } from '../../infra/enum/Gender';
 import { BodyType } from '../../infra/enum/BodyType';
 import { FaceType } from '../../infra/enum/FaceType';
 import { SkinType } from '../../infra/enum/SkinType';
+import { AuthProvider } from '../../infra/enum/AuthProvider';
 
 export class User {
+  get oAuthId(): number {
+    return this._oAuthId;
+  }
+
+  get provider(): AuthProvider {
+    return this._provider;
+  }
+
   private _mail : string;
 
   private _password : string;
@@ -22,16 +31,22 @@ export class User {
 
   private _apple: number;
 
+  private _oAuthId : number;
+
+  private _provider : AuthProvider;
+
   constructor(
-    mail: string,
-    password : string,
-    gender: Gender,
-    name : string,
-    birthday : Date,
-    bodyType : BodyType,
-    faceType : FaceType,
-    skinType : SkinType,
-    apple : number,
+    mail?: string,
+    password? : string,
+    gender?: Gender,
+    name? : string,
+    birthday? : Date,
+    bodyType? : BodyType,
+    faceType? : FaceType,
+    skinType? : SkinType,
+    apple? : number,
+    oAuthId? : number,
+    provider? : AuthProvider,
   ) {
     this._mail = mail;
     this._password = password;
@@ -42,6 +57,8 @@ export class User {
     this._faceType = faceType;
     this._skinType = skinType;
     this._apple = apple;
+    this._oAuthId = oAuthId;
+    this._provider = provider;
   }
 
   addApple(number:number) : void {
