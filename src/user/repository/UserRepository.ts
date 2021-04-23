@@ -6,8 +6,22 @@ import { PasswordAuthDto } from '../../auth/dto/PasswordAuthDto';
 import { UserMapper } from '../mapper/UserMapper';
 import { OAuthDto } from '../../infra/passport/OAuthDto';
 import { AppleValueCase } from '../../infra/enum/AppleValueCase';
+import { SkinType } from '../../infra/enum/SkinType';
+import { Gender } from '../../infra/enum/Gender';
 
 export class UserRepository extends AbstractUserRepository {
+  async getBodyType(gender:Gender): Promise<any[]> {
+    const conn = QueryExecutor.getInstance().getReadConnection();
+    const result = await conn('everywear_bodyType').select('bodyType', 'imgUrl').where({ gender });
+    return result;
+  }
+
+  async getFaceType(): Promise<any[]> {
+    const conn = QueryExecutor.getInstance().getReadConnection();
+    const result = await conn('everywear_faceType').select('faceType', 'imgUrl');
+    return result;
+  }
+
   async update(data: any, mail:string): Promise<void> {
     const conn = QueryExecutor.getInstance().getWriteConnection();
     await conn('everywear_user').update(data).where({ mail });
@@ -17,6 +31,12 @@ export class UserRepository extends AbstractUserRepository {
     const conn = QueryExecutor.getInstance().getWriteConnection();
     const [rows] = await conn('everywear_user').insert(data);
     await conn('everywear_apple').insert({ userId: rows, value: 2, reason: AppleValueCase.SignUp });
+    return rows;
+  }
+
+  async getSkinType(): Promise<SkinType[]> {
+    const conn = QueryExecutor.getInstance().getReadConnection();
+    const rows = await conn('everywear_skinType').select('skinType');
     return rows;
   }
 

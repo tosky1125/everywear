@@ -21,7 +21,6 @@ class AuthController extends Controller {
     router.get('/api/v1/auth/kakao/callback', passport.authenticate('kakao'), this.kakaoCallback);
     router.post('/api/v1/auth/password', this.signIn);
     router.post('/api/v1/auth/reset', this.resetPassword);
-
     return router;
   }
 
