@@ -13,6 +13,7 @@ import { InvalidMimeTypeError } from '../error/InvalidMimeTypeError';
 import { S3UploadError } from '../error/S3UploadError';
 import { FileStreamError } from '../error/FileStreamError';
 import { FileDBInsertError } from '../error/FileDBInsertError';
+import { UserNotExistError } from '../../auth/error/UserNotExistError';
 
 const FileSizeLimit = 30 * 1024 * 1024;
 
@@ -31,6 +32,11 @@ function mimeTypeToExtension(mimeType:string): string {
 
 export class UploadFileService {
   async execute(request:Request) {
+    const { user } = request;
+    if (!user || !user.id) {
+      throw new UserNotExistError();
+    }
+
     if (!request.file) {
       throw new FileNotExistError();
     }
@@ -73,7 +79,7 @@ export class UploadFileService {
 
     const conn = QueryExecutor.getInstance().getWriteConnection();
     const [queryResult] = await conn('everywear_upload_files').insert({
-      userId: null, // TODO: session 존재 시에는 userId 값이 들어 갈 수 있어야 함
+      userId: user.id, // TODO: session 존재 시에는 userId 값이 들어 갈 수 있어야 함
       uploadDate: new Date(),
       fileUuid,
       fileUrl: uploadResult.Location,

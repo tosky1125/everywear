@@ -79,6 +79,35 @@ export class UserRepository extends AbstractUserRepository {
     return UserMapper.toService(rows);
   }
 
+  async getByMail(data:string): Promise<User> {
+    const conn = QueryExecutor.getInstance().getReadConnection();
+    const [rows] = await conn('everywear_user as User')
+      .select('User.*', 'Skin.skinType', 'Body.bodyType', 'Face.faceType', 't1.apple', 'Image.imgUrl')
+      .where({ mail: data })
+      .leftJoin('everywear_skinType as Skin', function () {
+        this.on('User.skinTypeId', '=', 'Skin.skinTypeId');
+      })
+      .leftJoin('everywear_faceType as Face', function () {
+        this.on('User.faceTypeId', '=', 'Face.faceTypeId');
+      })
+      .leftJoin('everywear_bodyType as Body', function () {
+        this.on('User.bodyTypeId', '=', 'Body.bodyTypeId');
+      })
+      .leftJoin('everywear_user_profileImage as Image', function () {
+        this.on('User.userId', '=', 'Image.userId');
+      })
+      .leftJoin(conn.raw(`
+      (SELECT 
+        userId, SUM(value) AS apple 
+      FROM 
+        everywear_apple 
+      GROUP BY userId) AS t1 
+      ON 
+        User.userId = t1.userId
+      `));
+    return UserMapper.toService(rows);
+  }
+
   async getByOAuthInfo(data: OAuthDto): Promise<User> {
     const conn = QueryExecutor.getInstance().getReadConnection();
     const [rows] = await conn('everywear_user as User')

@@ -22,7 +22,7 @@ passport.deserializeUser((user, done) => {
 passport.use('kakao', new KakaoStrategy({
   clientID: 'de2237bf43e6582ed18ac447ac76527b',
   clientSecret: '',
-  callbackURL: 'http://localhost:3000/api/v1/auth/kakao/callback',
+  callbackURL: 'http://everyweardev-env.eba-azpdvh2m.ap-northeast-2.elasticbeanstalk.com/api/v1/auth/kakao/callback',
 }, async (accessToken, refreshToken, profile, done) => {
   const conn = QueryExecutor.getInstance().getReadConnection();
   let [user] = await conn('everywear_user as User')
@@ -91,7 +91,7 @@ passport.use('kakao', new KakaoStrategy({
 
 passport.use('userStrategy1.0', new JwtStrategy(jwtOpts, async (payload, done) => {
   try {
-    const user = await new UserRepository().getByMail(payload.id);
+    const user = await new UserRepository().getByMail(payload.mail);
     if (!user) return done(null, false);
     return done(null, user);
   } catch (err) {

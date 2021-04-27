@@ -43,7 +43,7 @@ export class ApplicationConfig {
 
   private static poolMaxTest = process.env.POOL_MAX || 0;
 
-  private static port = process.env.port || 3000;
+  private static port = process.env.PORT || 3000;
 
   private static jwtSecret = process.env.jwtSecret || 'everywear';
 

@@ -30,11 +30,13 @@ export class SigninUserService {
     return {
       user,
       token: JwtTokenGenerator.get({
+        userId: user.id,
         name: user.name,
         faceType: user.faceType,
         skinType: user.skinType,
         bodyType: user.bodyType,
         mail: user.mail,
+        apple: user.apple,
       }),
     };
   }

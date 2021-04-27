@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import multer from 'multer';
+import passport from 'passport';
 import { Controller } from '../infra/util/Controller';
 import { UploadFileService } from './service/UploadFileService';
 import { StatusCode } from '../infra/enum/StatusCode';
@@ -18,7 +19,7 @@ class FileController extends Controller {
 
   getRouter(): Router {
     const router = Router();
-    router.post('/api/v1/file', this.upload.single('file'), this.fileCreate);
+    router.post('/api/v1/file', passport.authenticate('userStrategy1.0'), this.upload.single('file'), this.fileCreate);
     return router;
   }
 

@@ -17,9 +17,10 @@ export class SignupUserService {
       throw new SignUpUserExistError();
     }
 
-    await this.userRepository.signUp(data);
+    const result = await this.userRepository.signUp(data);
 
     const user = new User(
+      result,
       data.mail,
       data.password,
       data.gender,
@@ -29,6 +30,9 @@ export class SignupUserService {
       data.faceType,
       data.skinType,
       2,
+      null,
+      null,
+      null,
     );
 
     return {

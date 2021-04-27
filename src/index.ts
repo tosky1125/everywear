@@ -7,16 +7,16 @@ import AuthController from './auth/AuthController';
 import passport from './infra/passport/passport';
 import FileController from './file/FileController';
 
-const app = express();
+const index = express();
 const port = ApplicationConfig.getPort();
-app.use(header());
-app.use(bodyParser.json({ limit: 1024 * 1024 * 50, type: 'application/json' }));
-app.use(bodyParser.urlencoded({ extended: true, limit: 1024 * 1024 * 50, type: 'application/x-www-form-urlencoded' }));
-app.use(passport.initialize());
-app.use(UserController.getRouter());
-app.use(AuthController.getRouter());
-app.use(FileController.getRouter());
+index.use(header());
+index.use(bodyParser.json({ limit: 1024 * 1024 * 50, type: 'application/json' }));
+index.use(bodyParser.urlencoded({ extended: true, limit: 1024 * 1024 * 50, type: 'application/x-www-form-urlencoded' }));
+index.use(passport.initialize());
+index.use(UserController.getRouter());
+index.use(AuthController.getRouter());
+index.use(FileController.getRouter());
 
-app.listen(port, () => {
+index.listen(port, () => {
   console.log(`App is Listening to Port ${port}`);
 });

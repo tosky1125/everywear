@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { exec } from 'child_process';
+import path from 'path';
 import Listr from 'listr';
 import fs from 'fs';
 import fse from 'fs-extra';
@@ -10,7 +11,16 @@ import packageJson from './package.json';
 const PATH_SRC = './src';
 const PATH_DIST = './dist';
 const PATH_ARCHIVE = './archive';
-
+const ASSETS = [
+  {
+    source: path.resolve(__dirname, './.ebextensions'),
+    destination: path.resolve(__dirname, `${PATH_DIST}/.ebextensions`),
+  },
+  {
+    source: path.resolve(__dirname, './.npmrc'),
+    destination: path.resolve(__dirname, `${PATH_DIST}/.npmrc`),
+  },
+];
 
 function clean(dir) {
   fse.removeSync(dir);
@@ -40,6 +50,12 @@ function createPackageJson(basePackage) {
   };
   fse.writeJsonSync(`${PATH_DIST}/package.json`, builtPackageJson, {
     spaces: 2,
+  });
+}
+
+function copyAssets(assets) {
+  assets.forEach((item) => {
+    fse.copySync(item.source, item.destination, { });
   });
 }
 
@@ -96,6 +112,10 @@ const tasks = new Listr([
   {
     title: 'Compile source',
     task: () => compileScript(PATH_SRC, PATH_DIST),
+  },
+  {
+    title: 'Copy assets',
+    task: () => copyAssets(ASSETS),
   },
   {
     title: 'Create package.json',
