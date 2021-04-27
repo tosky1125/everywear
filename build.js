@@ -126,7 +126,7 @@ const tasks = new Listr([
     task: async () => {
       archiveFilename = await getArchiveName(
         packageJson.version,
-        await getCurrentBranch(),
+        'master',
       );
       return createZip(PATH_DIST, PATH_ARCHIVE, archiveFilename);
     },
