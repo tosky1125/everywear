@@ -1,4 +1,8 @@
 export enum FaceType {
   Circle = 'circle',
-  Narrow = 'narrow',
+  Egg = 'egg',
+  Oval = 'oval',
+  Square = 'square',
+  ReverseTriangle = 'reverseTriangle',
+  Rhombus = 'rhombus',
 }

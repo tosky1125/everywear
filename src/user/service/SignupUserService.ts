@@ -1,6 +1,9 @@
 import { AbstractUserRepository } from '../repository/AbstractUserRepository';
-import { SignupUserDto } from '../dto/SignupUserDto';
-import { InternalServerError } from '../../infra/error/InternalServerError';
+import { RequestUserDto } from '../dto/RequestUserDto';
+import { User } from '../domain/User';
+import JwtTokenGenerator from '../../infra/passport/JwtGenerator';
+import { UserSignResponseDto } from '../../auth/dto/UserSignResponseDto';
+import { SignUpUserExistError } from '../error/SignUpUserExistError';
 
 export class SignupUserService {
   constructor(
@@ -8,12 +11,36 @@ export class SignupUserService {
   ) {
   }
 
-  async execute(data:SignupUserDto) {
-    try {
-      const result = await this.userRepository.signUp(data);
-      return result;
-    } catch (e) {
-      throw new InternalServerError(e);
+  async execute(data:RequestUserDto):Promise<UserSignResponseDto> {
+    const isExist = await this.userRepository.getByMail(data.mail);
+    if (isExist) {
+      throw new SignUpUserExistError();
     }
+
+    await this.userRepository.signUp(data);
+
+    const user = new User(
+      data.mail,
+      data.password,
+      data.gender,
+      data.name,
+      data.birthday,
+      data.bodyType,
+      data.faceType,
+      data.skinType,
+      2,
+    );
+
+    return {
+      user,
+      token: JwtTokenGenerator.get({
+        name: user.name,
+        faceType: user.faceType,
+        skinType: user.skinType,
+        bodyType: user.bodyType,
+        mail: user.mail,
+        apple: user.apple,
+      }),
+    } as UserSignResponseDto;
   }
 }
