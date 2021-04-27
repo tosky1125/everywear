@@ -19,4 +19,8 @@ export abstract class AbstractUserRepository {
   abstract getFaceType() : Promise<any[]>;
 
   abstract getBodyType(gender:Gender) : Promise<any[]>;
+
+  abstract updateUserProfileImage(userId:number, imgUrl: string) : Promise<void>;
+
+  abstract insertUserProfileImage(userId:number, imgUrl: string) : Promise<void>;
 }

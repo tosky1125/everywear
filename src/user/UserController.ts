@@ -16,6 +16,8 @@ import { GetFaceTypeService } from './service/GetFaceTypeService';
 import { GetBodyTypeService } from './service/GetBodyTypeService';
 import { Gender } from '../infra/enum/Gender';
 import { GenderValidationError } from './error/GenderValidationError';
+import { UploadFileService } from '../file/service/UploadFileService';
+import { UpdateUserProfileImageService } from './service/UpdateUserProfileImageService';
 
 class UserController extends Controller {
   getRouter(): Router {
@@ -25,8 +27,37 @@ class UserController extends Controller {
     router.get('/api/v1/user/skinType', this.skinType);
     router.get('/api/v1/user/faceType', this.faceType);
     router.get('/api/v1/user/bodyType/:gender', this.bodyType);
+    router.put('/api/v1/user/profileImage', passport.authenticate('userStrategy1.0'), this.updateProfileImage);
     // router.get('/api/v1/user', passport.authenticate('userStrategy1.0'));
     return router;
+  }
+
+  async updateProfileImage(req:Request, res:Response) : Promise<void> {
+    const uploadFileService = new UploadFileService();
+    const updateFileService = new UpdateUserProfileImageService(new UserRepository());
+    const { user } = req;
+    try {
+      const imgUrl = await uploadFileService.execute(req);
+      await updateFileService.execute(user, imgUrl.fileUrl);
+      res.status(StatusCode.Ok).json({
+        result: ResponseResult.Success,
+        data: { imgUrl: imgUrl.fileUrl },
+      });
+    } catch (e) {
+      if (e instanceof UserNotExistError) {
+        res.status(StatusCode.Notfound).json({
+          result: ResponseResult.Fail,
+          err: 'ERR_USER_NOTFOUND',
+          message: e.message,
+        });
+      }
+      Logger.error(e);
+      res.status(StatusCode.InternalServerError).json({
+        result: ResponseResult.Fail,
+        err: 'ERR_INTERNAL_SERVER',
+        message: '서버에러가 발생했습니다.',
+      });
+    }
   }
 
   async bodyType(req:Request, res:Response): Promise<void> {

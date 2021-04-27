@@ -10,6 +10,16 @@ import { SkinType } from '../../infra/enum/SkinType';
 import { Gender } from '../../infra/enum/Gender';
 
 export class UserRepository extends AbstractUserRepository {
+  async insertUserProfileImage(userId: number, imgUrl: string): Promise<void> {
+    const conn = QueryExecutor.getInstance().getWriteConnection();
+    await conn('everywear_user_profileImage').insert({ userId, imgUrl });
+  }
+
+  async updateUserProfileImage(userId:number, imgUrl: string): Promise<void> {
+    const conn = QueryExecutor.getInstance().getWriteConnection();
+    await conn('everywear_user_profileImage').update({ imgUrl }).where({ userId });
+  }
+
   async getBodyType(gender:Gender): Promise<any[]> {
     const conn = QueryExecutor.getInstance().getReadConnection();
     const result = await conn('everywear_bodyType').select('bodyType', 'imgUrl').where({ gender });
@@ -40,11 +50,11 @@ export class UserRepository extends AbstractUserRepository {
     return rows;
   }
 
-  async getByMail(data:string): Promise<User> {
+  async getByUserId(data:string): Promise<User> {
     const conn = QueryExecutor.getInstance().getReadConnection();
     const [rows] = await conn('everywear_user as User')
-      .select('User.*', 'Skin.skinType', 'Body.bodyType', 'Face.faceType', 't1.apple')
-      .where({ mail: data })
+      .select('User.*', 'Skin.skinType', 'Body.bodyType', 'Face.faceType', 't1.apple', 'Image.imgUrl')
+      .where({ userId: data })
       .leftJoin('everywear_skinType as Skin', function () {
         this.on('User.skinTypeId', '=', 'Skin.skinTypeId');
       })
@@ -53,6 +63,9 @@ export class UserRepository extends AbstractUserRepository {
       })
       .leftJoin('everywear_bodyType as Body', function () {
         this.on('User.bodyTypeId', '=', 'Body.bodyTypeId');
+      })
+      .leftJoin('everywear_user_profileImage as Image', function () {
+        this.on('User.userId', '=', 'Image.userId');
       })
       .leftJoin(conn.raw(`
       (SELECT 

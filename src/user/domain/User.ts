@@ -5,49 +5,48 @@ import { SkinType } from '../../infra/enum/SkinType';
 import { AuthProvider } from '../../infra/enum/AuthProvider';
 
 export class User {
-  get oAuthId(): number {
-    return this._oAuthId;
-  }
+  private _id : number;
 
-  get provider(): AuthProvider {
-    return this._provider;
-  }
+  private _mail : string | null;
 
-  private _mail : string;
+  private _password : string | null;
 
-  private _password : string;
+  private _gender : Gender | null;
 
-  private _gender : Gender;
+  private _name : string | null;
 
-  private _name : string;
+  private _birthday : Date | null;
 
-  private _birthday : Date;
+  private _bodyType : BodyType | null;
 
-  private _bodyType : BodyType;
+  private _faceType : FaceType | null;
 
-  private _faceType : FaceType;
+  private _skinType : SkinType | null;
 
-  private _skinType : SkinType;
+  private _apple : number | null;
 
-  private _apple: number;
+  private _oAuthId : number | null;
 
-  private _oAuthId : number;
+  private _provider : AuthProvider | null;
 
-  private _provider : AuthProvider;
+  private _profileImage : string | null;
 
   constructor(
-    mail?: string,
-    password? : string,
-    gender?: Gender,
-    name? : string,
-    birthday? : Date,
-    bodyType? : BodyType,
-    faceType? : FaceType,
-    skinType? : SkinType,
-    apple? : number,
-    oAuthId? : number,
-    provider? : AuthProvider,
+    id: number,
+    mail: string | null,
+    password : string | null,
+    gender: Gender | null,
+    name : string | null,
+    birthday : Date | null,
+    bodyType : BodyType | null,
+    faceType : FaceType | null,
+    skinType : SkinType | null,
+    apple : number | null,
+    oAuthId : number | null,
+    provider : AuthProvider | null,
+    profileImage : string | null,
   ) {
+    this._id = id;
     this._mail = mail;
     this._password = password;
     this._gender = gender;
@@ -59,49 +58,68 @@ export class User {
     this._apple = apple;
     this._oAuthId = oAuthId;
     this._provider = provider;
+    this._profileImage = profileImage;
+  }
+
+  get id(): number {
+    return this._id;
+  }
+
+  get oAuthId(): number | null {
+    return this._oAuthId;
+  }
+
+  get provider(): AuthProvider | null {
+    return this._provider;
+  }
+
+  get profileImage(): string | null {
+    return this._profileImage;
   }
 
   addApple(number:number) : void {
+    if (!this._apple) this._apple = 0;
     this._apple += number;
   }
 
   useApple(number?:number) : void {
+    if (!this._apple) this._apple = 0;
     this._apple -= number || 1;
   }
 
-  get apple() : number {
+  get apple() : number | null {
     return this._apple;
   }
 
-  get mail(): string {
+  get mail(): string | null {
     return this._mail;
   }
 
-  get skinType(): SkinType {
+  get skinType(): SkinType | null {
     return this._skinType;
   }
 
-  get password(): string {
+  get password(): string | null {
     return this._password;
   }
 
-  get gender(): Gender {
+  get gender(): Gender | null {
     return this._gender;
   }
 
-  get name(): string {
+  get name(): string | null {
     return this._name;
   }
 
-  get birthday(): Date {
+  get birthday(): Date | null {
     return this._birthday;
   }
 
-  get bodyType(): BodyType {
+  get bodyType(): BodyType | null {
     return this._bodyType;
   }
 
-  get faceType(): FaceType {
+  get faceType(): FaceType | null {
     return this._faceType;
   }
 }

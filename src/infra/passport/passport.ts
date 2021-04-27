@@ -7,6 +7,7 @@ import JwtTokenGenerator from './JwtGenerator';
 import { ApplicationConfig } from '../ApplicationConfig';
 import { UserMapper } from '../../user/mapper/UserMapper';
 import { User } from '../../user/domain/User';
+import { AuthProvider } from '../enum/AuthProvider';
 
 const jwtOpts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -46,8 +47,8 @@ passport.use('kakao', new KakaoStrategy({
         User.userId = t1.userId
       `));
   if (!user) {
-    await conn('everywear_user').insert({ provider: profile.provider, oAuthId: profile.id });
-    const newUser = new User(null,
+    const [id] = await conn('everywear_user').insert({ provider: profile.provider, oAuthId: profile.id });
+    const newUser = new User(id,
       null,
       null,
       null,
@@ -56,17 +57,20 @@ passport.use('kakao', new KakaoStrategy({
       null,
       null,
       null,
-      profile.id,
-      profile.provider);
+      null,
+      Number(profile.id),
+      profile.provider as AuthProvider,
+      null);
     return done(null, {
       ...newUser,
       token: JwtTokenGenerator.get({
-        name: user.name,
-        faceType: user.faceType,
-        skinType: user.skinType,
-        bodyType: user.bodyType,
-        mail: user.mail,
-        apple: user.apple,
+        userId: newUser.id,
+        name: newUser.name,
+        faceType: newUser.faceType,
+        skinType: newUser.skinType,
+        bodyType: newUser.bodyType,
+        mail: newUser.mail,
+        apple: newUser.apple,
       }),
     });
   }
@@ -74,6 +78,7 @@ passport.use('kakao', new KakaoStrategy({
   return done(null, {
     ...user,
     token: JwtTokenGenerator.get({
+      userId: user.id,
       name: user.name,
       faceType: user.faceType,
       skinType: user.skinType,
@@ -86,7 +91,7 @@ passport.use('kakao', new KakaoStrategy({
 
 passport.use('userStrategy1.0', new JwtStrategy(jwtOpts, async (payload, done) => {
   try {
-    const user = await new UserRepository().getByMail(payload.mail);
+    const user = await new UserRepository().getByMail(payload.id);
     if (!user) return done(null, false);
     return done(null, user);
   } catch (err) {
