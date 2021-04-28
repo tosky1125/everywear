@@ -46,7 +46,7 @@ export class UserRepository extends AbstractUserRepository {
 
   async getSkinType(): Promise<SkinType[]> {
     const conn = QueryExecutor.getInstance().getReadConnection();
-    const rows = await conn('everywear_skinType').select('skinType');
+    const rows = await conn('everywear_skinType').select('skinType', 'code');
     return rows;
   }
 
