@@ -66,3 +66,5 @@ class EvaluationController extends Controller {
     }
   }
 }
+
+export default new EvaluationController()
