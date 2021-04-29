@@ -48,7 +48,7 @@ class EvaluationController extends Controller {
       const result = await service.execute();
       res.status(StatusCode.Ok).json({
         result: ResponseResult.Success,
-        message: 'Evaluation Successfully Created',
+        data: result,
       });
     } catch (e) {
       if (e instanceof PointRangeError) {
