@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "nodemon --exec babel-node -- src/index.ts --extensions \\\\\\\".ts,.js\\\\\\\"",
+    "watch": "nodemon --exec babel-node -- src/index.ts --extensions \".ts,.js\"",
     "build": "npm run bundle",
     "bundle": "babel-node build.js"
   },
