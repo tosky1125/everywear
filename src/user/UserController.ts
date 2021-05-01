@@ -18,6 +18,7 @@ import { Gender } from '../infra/enum/Gender';
 import { GenderValidationError } from './error/GenderValidationError';
 import { UploadFileService } from '../file/service/UploadFileService';
 import { UpdateUserProfileImageService } from './service/UpdateUserProfileImageService';
+import { GetUserService } from './service/GetUserService';
 
 class UserController extends Controller {
   getRouter(): Router {
@@ -28,8 +29,27 @@ class UserController extends Controller {
     router.get('/api/v1/user/faceType', this.faceType);
     router.get('/api/v1/user/bodyType/:gender', this.bodyType);
     router.put('/api/v1/user/profileImage', passport.authenticate('userStrategy1.0'), this.updateProfileImage);
-    // router.get('/api/v1/user', passport.authenticate('userStrategy1.0'));
+    router.get('/api/v1/user', passport.authenticate('userStrategy1.0'), this.getUser);
     return router;
+  }
+
+  async getUser(req:Request, res:Response) : Promise<void> {
+    const { user } = req;
+    const service = new GetUserService(new UserRepository());
+    try {
+      const result = await service.execute(user.id);
+      res.status(StatusCode.Ok).json({
+        result: ResponseResult.Success,
+        data: { result },
+      });
+    } catch (e) {
+      Logger.error(e);
+      res.status(StatusCode.InternalServerError).json({
+        result: ResponseResult.Fail,
+        err: 'ERR_INTERNAL_SERVER',
+        message: '서버에러가 발생했습니다.',
+      });
+    }
   }
 
   async updateProfileImage(req:Request, res:Response) : Promise<void> {

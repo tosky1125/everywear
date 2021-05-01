@@ -50,11 +50,11 @@ export class UserRepository extends AbstractUserRepository {
     return rows;
   }
 
-  async getByUserId(data:string): Promise<User> {
+  async getByUserId(userId:number): Promise<User> {
     const conn = QueryExecutor.getInstance().getReadConnection();
     const [rows] = await conn('everywear_user as User')
       .select('User.*', 'Skin.skinType', 'Body.bodyType', 'Face.faceType', 't1.apple', 'Image.imgUrl')
-      .where({ userId: data })
+      .where({ 'User.userId': userId })
       .leftJoin('everywear_skinType as Skin', function () {
         this.on('User.skinTypeId', '=', 'Skin.skinTypeId');
       })

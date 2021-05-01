@@ -23,4 +23,6 @@ export abstract class AbstractUserRepository {
   abstract updateUserProfileImage(userId:number, imgUrl: string) : Promise<void>;
 
   abstract insertUserProfileImage(userId:number, imgUrl: string) : Promise<void>;
+
+  abstract getByUserId(userId: number): Promise<User>;
 }

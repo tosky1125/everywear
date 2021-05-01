@@ -18,7 +18,7 @@ class EvaluationController extends Controller {
     const service = new CreateEvaluation(new EvaluationRepository());
     try {
       const { user } = req;
-      await service.execute(req.user, req.body);
+      await service.execute(user, req.body);
       res.status(StatusCode.Ok).json({
         result: ResponseResult.Success,
         message: 'Evaluation Successfully Created',
@@ -33,3 +33,4 @@ class EvaluationController extends Controller {
     }
   }
 }
+export default new EvaluationController();
