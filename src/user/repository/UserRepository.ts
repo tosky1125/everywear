@@ -44,8 +44,17 @@ export class UserRepository extends AbstractUserRepository {
   }
 
   async signUp(data: RequestUserDto): Promise<number> {
+    const {
+      bodyType, faceType, skinType, gender, ...chunk
+    } = data;
+    const rConn = QueryExecutor.getInstance().getReadConnection();
+    const [bodyTypeId] = await rConn('everywear_bodyType').select('bodyTypeId').where({ bodyType, gender });
+    const [faceTypeId] = await rConn('everywear_faceType').select('faceTypeId').where({ faceType });
+    const [skinTypeId] = await rConn('everywear_skinType').select('skinTypeId').where({ skinType });
     const conn = QueryExecutor.getInstance().getWriteConnection();
-    const [rows] = await conn('everywear_user').insert(data);
+    const [rows] = await conn('everywear_user').insert({
+      ...chunk, bodyTypeId, faceTypeId, skinTypeId,
+    });
     await conn('everywear_apple').insert({ userId: rows, value: 2, reason: AppleValueCase.SignUp });
     return rows;
   }
