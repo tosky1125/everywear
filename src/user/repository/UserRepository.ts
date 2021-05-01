@@ -79,7 +79,7 @@ export class UserRepository extends AbstractUserRepository {
     return UserMapper.toService(rows);
   }
 
-  async getByMail(data:string): Promise<User> {
+  async getByMail(data:string): Promise<any> {
     const conn = QueryExecutor.getInstance().getReadConnection();
     const [rows] = await conn('everywear_user as User')
       .select('User.*', 'Skin.skinType', 'Body.bodyType', 'Face.faceType', 't1.apple', 'Image.imgUrl')
@@ -105,7 +105,7 @@ export class UserRepository extends AbstractUserRepository {
       ON 
         User.userId = t1.userId
       `));
-    return UserMapper.toService(rows);
+    return rows ? UserMapper.toService(rows) : null;
   }
 
   async getByOAuthInfo(data: OAuthDto): Promise<User> {

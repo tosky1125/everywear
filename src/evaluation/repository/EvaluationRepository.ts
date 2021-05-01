@@ -3,6 +3,10 @@ import { EvaluationRequest } from '../domain/EvaluationRequest';
 import { QueryExecutor } from '../../infra/database/QueryExecutor';
 
 export class EvaluationRepository extends AbstractEvaluationRepository {
+  getPurpose(): Promise<any[]> {
+    const conn = QueryExecutor.getInstance().getReadConnection();
+    return conn('everywear_outingPurpose').select();
+  }
   async createEvaluation(data: EvaluationRequest): Promise<void> {
     const conn = QueryExecutor.getInstance().getWriteConnection();
     return conn('everywear_evaluation').insert({
