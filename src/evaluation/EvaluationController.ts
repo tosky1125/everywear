@@ -6,8 +6,8 @@ import { EvaluationRepository } from './repository/EvaluationRepository';
 import { PointRangeError } from './error/PointRangeError';
 import { StatusCode } from '../infra/enum/StatusCode';
 import { ResponseResult } from '../infra/enum/ResponseResult';
-import {GetOutingPurpose} from "./service/GetOutingPurpose";
-import Logger from "../infra/Logger";
+import { GetOutingPurpose } from './service/GetOutingPurpose';
+import Logger from '../infra/Logger';
 
 class EvaluationController extends Controller {
   getRouter(): Router {
@@ -67,4 +67,3 @@ class EvaluationController extends Controller {
   }
 }
 export default new EvaluationController();
-

@@ -10,6 +10,12 @@ import { SkinType } from '../../infra/enum/SkinType';
 import { Gender } from '../../infra/enum/Gender';
 
 export class UserRepository extends AbstractUserRepository {
+  async getDeviceToken(userId: number): Promise<string> {
+    const conn = QueryExecutor.getInstance().getReadConnection();
+    const [token] = await conn('everywear_user').select('deviceToken').where({ userId });
+    return token;
+  }
+
   async insertUserProfileImage(userId: number, imgUrl: string): Promise<void> {
     const conn = QueryExecutor.getInstance().getWriteConnection();
     await conn('everywear_user_profileImage').insert({ userId, imgUrl });

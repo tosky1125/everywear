@@ -25,4 +25,6 @@ export abstract class AbstractUserRepository {
   abstract insertUserProfileImage(userId:number, imgUrl: string) : Promise<void>;
 
   abstract getByUserId(userId: number): Promise<User>;
+
+  abstract getDeviceToken(userId:number):Promise<string>;
 }
