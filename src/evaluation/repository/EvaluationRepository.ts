@@ -3,6 +3,12 @@ import { EvaluationRequest } from '../domain/EvaluationRequest';
 import { QueryExecutor } from '../../infra/database/QueryExecutor';
 
 export class EvaluationRepository extends AbstractEvaluationRepository {
+  async getEvaluationByUserId(userId: number): Promise<any> {
+    const conn = QueryExecutor.getInstance().getReadConnection();
+    const result = await conn('everywear_evaluation').select().where({ userId });
+    return result;
+  }
+
   async getUncompletedEvaluation(): Promise<any> {
     const conn = QueryExecutor.getInstance().getReadConnection();
     const result = await conn('everywear_evaluation').select().where({ isEvaluated: false });

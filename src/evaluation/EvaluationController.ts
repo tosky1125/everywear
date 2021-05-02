@@ -8,13 +8,33 @@ import { StatusCode } from '../infra/enum/StatusCode';
 import { ResponseResult } from '../infra/enum/ResponseResult';
 import { GetOutingPurpose } from './service/GetOutingPurpose';
 import Logger from '../infra/Logger';
+import { GetEvaluation } from './service/GetEvaluation';
 
 class EvaluationController extends Controller {
   getRouter(): Router {
     const router = Router();
     router.post('/api/v1/evaluation', passport.authenticate('userStrategy1.0'), this.createEvaluate);
     router.get('/api/v1/evaluation/purpose', passport.authenticate('userStrategy1.0'), this.getOutingPurpose);
+    router.get('/api/v1/evaluation', passport.authenticate('userStrategy1.0'), this.getEvaluation);
     return router;
+  }
+
+  async getEvaluation(req:Request, res:Response) {
+    const service = new GetEvaluation(new EvaluationRepository());
+    try {
+      await service.execute(req.user);
+      res.status(StatusCode.Ok).json({
+        result: ResponseResult.Success,
+        message: 'Evaluation Successfully Created',
+      });
+    } catch (e) {
+      Logger.error(e);
+      res.status(StatusCode.InternalServerError).json({
+        result: ResponseResult.Fail,
+        err: 'ERR_INTERNAL_SERVER',
+        message: '서버에러가 발생했습니다.',
+      });
+    }
   }
 
   async createEvaluate(req:Request, res: Response) {
