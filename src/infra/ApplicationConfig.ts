@@ -59,9 +59,9 @@ export class ApplicationConfig {
 
   private static mailPort = '587';
 
-  private static awsAccessKey = process.env.AWS_ACCESS_KEY || 'AKIAVZGJ7YYKYR2KAEEP';
+  private static awsAccessKey = process.env.AWS_ACCESS_KEY ;
 
-  private static awsSecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY || 'yzujOWKpvqa/Qvqs2hOh1GqZ3gch3aPRGam8E5eu';
+  private static awsSecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
 
   static getS3Bucket() {
     return this.S3Bucket;
