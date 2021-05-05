@@ -16,10 +16,10 @@ const ASSETS = [
     source: path.resolve(__dirname, './.ebextensions'),
     destination: path.resolve(__dirname, `${PATH_DIST}/.ebextensions`),
   },
-  // {
-  //   source: path.resolve(__dirname, './src/infra/firebase/google-services.json'),
-  //   destination: path.resolve(__dirname, `${PATH_DIST}/infra/firebase/data.json`),
-  // },
+  {
+    source: path.resolve(__dirname, './src/infra/firebase/asdfasd-250c0-firebase-adminsdk-k7nlj-4bf04bc284.json'),
+    destination: path.resolve(__dirname, `${PATH_DIST}/infra/firebase/asdfasd-250c0-firebase-adminsdk-k7nlj-4bf04bc284.json`),
+  },
   {
     source: path.resolve(__dirname, './.npmrc'),
     destination: path.resolve(__dirname, `${PATH_DIST}/.npmrc`),
