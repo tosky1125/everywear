@@ -17,6 +17,10 @@ const ASSETS = [
     destination: path.resolve(__dirname, `${PATH_DIST}/.ebextensions`),
   },
   {
+    source: path.resolve(__dirname, './src/infra/firebase/google-services.json'),
+    destination: path.resolve(__dirname, `${PATH_DIST}/infra/firebase/data.json`),
+  },
+  {
     source: path.resolve(__dirname, './.npmrc'),
     destination: path.resolve(__dirname, `${PATH_DIST}/.npmrc`),
   },

@@ -6,13 +6,27 @@ import { StatusCode } from '../infra/enum/StatusCode';
 import { ResponseResult } from '../infra/enum/ResponseResult';
 import Logger from '../infra/Logger';
 import { GetUncompletedEvaluation } from './service/GetUncompletedEvaluation';
+import { PushEvaluationCompleted } from './service/PushEvaluationCompleted';
+import { UserRepository } from '../user/repository/UserRepository';
 
 class AdminController extends Controller {
   getRouter(): Router {
     const router = Router();
     router.get('/api/v1/admin/evaluate', this.getUncompletedEvaluation);
     router.post('/api/v1/admin/evaluate', this.evaluateUser);
+    router.get('/api/shawn', this.pushTest);
     return router;
+  }
+
+  async pushTest(req:Request, res:Response) {
+    const service = new PushEvaluationCompleted(new UserRepository());
+    try {
+      await service.execute(1);
+      res.status(200).send('hi');
+    } catch (e) {
+      Logger.error(e);
+      res.status(500).send('bye');
+    }
   }
 
   async getUncompletedEvaluation(req:Request, res:Response): Promise<void> {

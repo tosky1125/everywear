@@ -14,6 +14,6 @@ export class CreateEvaluation {
     const { imgUrl, purpose, deviceToken } = body;
     const evaluation = new EvaluationRequest(user.id, imgUrl, purpose, false, 0, 0, 0, 0, 0);
     await this.evaluationRepository.createEvaluation(evaluation);
-    await this.userRepository.update({ deviceToken }, user.mail);
+    await this.userRepository.update({ deviceToken }, user.id);
   }
 }

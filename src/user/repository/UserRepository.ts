@@ -38,9 +38,18 @@ export class UserRepository extends AbstractUserRepository {
     return result;
   }
 
-  async update(data: any, mail:string): Promise<void> {
+  async update(data: any, userId:number): Promise<void> {
+    const {
+      bodyType, faceType, skinType, gender, ...chunk
+    } = data;
+    const rConn = QueryExecutor.getInstance().getReadConnection();
+    const [bodyTypeId] = await rConn('everywear_bodyType').select('bodyTypeId').where({ bodyType, gender });
+    const [faceTypeId] = await rConn('everywear_faceType').select('faceTypeId').where({ faceType });
+    const [skinTypeId] = await rConn('everywear_skinType').select('skinTypeId').where({ skinType });
     const conn = QueryExecutor.getInstance().getWriteConnection();
-    await conn('everywear_user').update(data).where({ mail });
+    await conn('everywear_user').update({
+      ...chunk, ...bodyTypeId, ...faceTypeId, ...skinTypeId,
+    }).where({ userId });
   }
 
   async signUp(data: RequestUserDto): Promise<number> {
@@ -53,7 +62,7 @@ export class UserRepository extends AbstractUserRepository {
     const [skinTypeId] = await rConn('everywear_skinType').select('skinTypeId').where({ skinType });
     const conn = QueryExecutor.getInstance().getWriteConnection();
     const [rows] = await conn('everywear_user').insert({
-      ...chunk, bodyTypeId, faceTypeId, skinTypeId,
+      ...chunk, ...bodyTypeId, ...faceTypeId, ...skinTypeId,
     });
     await conn('everywear_apple').insert({ userId: rows, value: 2, reason: AppleValueCase.SignUp });
     return rows;

@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 import { AbstractUserRepository } from '../../user/repository/AbstractUserRepository';
+import firebaseCert from '../../infra/firebase/asdfasd-250c0-firebase-adminsdk-k7nlj-4bf04bc284.json';
 
 export class PushEvaluationCompleted {
   constructor(
@@ -16,7 +17,10 @@ export class PushEvaluationCompleted {
       },
       token,
     };
-
+    console.log(firebaseCert);
+    admin.initializeApp({
+      credential: admin.credential.cert(firebaseCert),
+    });
     await admin.messaging().send(msg);
   }
 }

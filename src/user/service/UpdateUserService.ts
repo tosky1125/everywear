@@ -14,6 +14,6 @@ export class UpdateUserService {
       throw new UserNotExistError();
     }
 
-    await this.userRepository.update(params, user.mail);
+    await this.userRepository.update(params, user.id);
   }
 }

@@ -25,7 +25,7 @@ export class ResetUserPassword {
 
     const password = GenerateRandomPassword.get();
 
-    await this.userRepository.update({ password });
+    await this.userRepository.update({ password }, user.id);
 
     await new PasswordResetMail().send(mail, password);
   }

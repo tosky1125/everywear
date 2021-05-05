@@ -12,7 +12,7 @@ export abstract class AbstractUserRepository {
 
   abstract getByOAuthInfo(data: OAuthDto) : Promise<User>;
 
-  abstract update(data:any, mail:string) : Promise<void>;
+  abstract update(data:any, userId:number) : Promise<void>;
 
   abstract getSkinType() : Promise<SkinType[]>;
 

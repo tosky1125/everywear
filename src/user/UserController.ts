@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 import passport from 'passport';
+import multer from 'multer';
 import { Controller } from '../infra/util/Controller';
 import { SignupUserService } from './service/SignupUserService';
 import { UserRepository } from './repository/UserRepository';
@@ -21,14 +22,16 @@ import { UpdateUserProfileImageService } from './service/UpdateUserProfileImageS
 import { GetUserService } from './service/GetUserService';
 
 class UserController extends Controller {
+  private upload = multer({ dest: 'tmp/' });
+
   getRouter(): Router {
     const router = Router();
     router.post('/api/v1/user/signup', this.signup);
-    router.put('/api/v1/user', passport.authenticate('userStrategy1.0'), this.update);
     router.get('/api/v1/user/skinType', this.skinType);
     router.get('/api/v1/user/faceType', this.faceType);
     router.get('/api/v1/user/bodyType/:gender', this.bodyType);
-    router.put('/api/v1/user/profileImage', passport.authenticate('userStrategy1.0'), this.updateProfileImage);
+    router.post('/api/v1/user/profileImage', passport.authenticate('userStrategy1.0'), this.upload.single('file'), this.updateProfileImage);
+    router.put('/api/v1/user/update', passport.authenticate('userStrategy1.0'), this.update);
     router.get('/api/v1/user', passport.authenticate('userStrategy1.0'), this.getUser);
     return router;
   }
@@ -40,7 +43,7 @@ class UserController extends Controller {
       const result = await service.execute(user.id);
       res.status(StatusCode.Ok).json({
         result: ResponseResult.Success,
-        data: { result },
+        data: result,
       });
     } catch (e) {
       Logger.error(e);
@@ -146,7 +149,6 @@ class UserController extends Controller {
     const service = new UpdateUserService(new UserRepository());
     const data = req.body as RequestUserDto;
     const { user } = req;
-    console.log(user);
     try {
       await service.execute(data, user);
       res.status(StatusCode.Created).json({
