@@ -38,7 +38,7 @@ class UserController extends Controller {
     return router;
   }
 
-  async mailChech(req:Request, res:Response) : Promise<void> {
+  async mailCheck(req:Request, res:Response) : Promise<void> {
     const service = new CheckMailIsVerbose(new UserRepository());
     try {
       const result = await service.execute(req.body.mail);
