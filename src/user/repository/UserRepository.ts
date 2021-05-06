@@ -42,6 +42,9 @@ export class UserRepository extends AbstractUserRepository {
     const {
       bodyType, faceType, skinType, gender, ...chunk
     } = data;
+    if ('birthday' in chunk) {
+      chunk.birthday = new Date(chunk.birthday);
+    }
     const rConn = QueryExecutor.getInstance().getReadConnection();
     const [bodyTypeId] = await rConn('everywear_bodyType').select('bodyTypeId').where({ bodyType, gender });
     const [faceTypeId] = await rConn('everywear_faceType').select('faceTypeId').where({ faceType });
