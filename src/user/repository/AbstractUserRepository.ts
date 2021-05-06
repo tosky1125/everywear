@@ -27,4 +27,6 @@ export abstract class AbstractUserRepository {
   abstract getByUserId(userId: number): Promise<User>;
 
   abstract getDeviceToken(userId:number):Promise<string>;
+
+  abstract checkMailIsVerbose(mail:string):Promise<any>;
 }

@@ -10,6 +10,12 @@ import { SkinType } from '../../infra/enum/SkinType';
 import { Gender } from '../../infra/enum/Gender';
 
 export class UserRepository extends AbstractUserRepository {
+  async checkMailIsVerbose(mail: string): Promise<any> {
+    const conn = QueryExecutor.getInstance().getReadConnection();
+    const [rows] = await conn('everywear_user').select().where({ mail });
+    return rows;
+  }
+
   async getDeviceToken(userId: number): Promise<string> {
     const conn = QueryExecutor.getInstance().getReadConnection();
     const [token] = await conn('everywear_user').select('deviceToken').where({ userId });
