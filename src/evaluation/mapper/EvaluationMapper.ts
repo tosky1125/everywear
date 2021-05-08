@@ -2,7 +2,9 @@ import { EvaluationRequest } from '../domain/EvaluationRequest';
 
 export class EvaluationMapper {
   static execute(rows) {
-    return new EvaluationRequest(rows.userId,
+    return new EvaluationRequest(
+      rows.evaluationId,
+      rows.userId,
       rows.imgUrl,
       rows.purpose,
       rows.isEvaluated,
@@ -13,6 +15,7 @@ export class EvaluationMapper {
       rows.tpo,
       rows.similarImgUrl,
       rows.similarPerson,
-      rows.comment);
+      rows.comment,
+    );
   }
 }
