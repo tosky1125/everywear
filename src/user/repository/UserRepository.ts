@@ -19,7 +19,7 @@ export class UserRepository extends AbstractUserRepository {
   async getDeviceToken(userId: number): Promise<string> {
     const conn = QueryExecutor.getInstance().getReadConnection();
     const [token] = await conn('everywear_user').select('deviceToken').where({ userId });
-    return token;
+    return token.deviceToken;
   }
 
   async insertUserProfileImage(userId: number, imgUrl: string): Promise<void> {

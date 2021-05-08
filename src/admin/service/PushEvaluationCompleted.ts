@@ -10,7 +10,6 @@ export class PushEvaluationCompleted {
 
   async execute(userId:number) {
     const token = await this.userRepository.getDeviceToken(userId);
-    console.log(token);
     const msg = {
       notification: {
         title: 'everywear',
