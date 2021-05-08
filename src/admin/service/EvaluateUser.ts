@@ -1,18 +1,7 @@
-import fs from 'fs';
-import sharp from 'sharp';
-import { v4 as uuidV4 } from 'uuid';
 import { AbstractEvaluationRepository } from '../../evaluation/repository/AbstractEvaluationRepository';
 import { PushEvaluationCompleted } from './PushEvaluationCompleted';
 import { UserRepository } from '../../user/repository/UserRepository';
-import { InvalidFileSizeError } from '../../file/error/InvalidFileSizeError';
-import { InvalidFileError } from '../../file/error/InvalidFileError';
-import { InvalidMimeTypeError } from '../../file/error/InvalidMimeTypeError';
-import Logger from '../../infra/Logger';
-import { FileStreamError } from '../../file/error/FileStreamError';
-import { AwsSdk } from '../../infra/aws/AwsSdk';
-import { S3UploadError } from '../../file/error/S3UploadError';
-import { QueryExecutor } from '../../infra/database/QueryExecutor';
-import { ApplicationConfig } from '../../infra/ApplicationConfig';
+import { EvaluatingGrade } from '../../infra/enum/EvaluatingGrade';
 
 const FileSizeLimit = 30 * 1024 * 1024;
 
@@ -38,9 +27,10 @@ export class EvaluateUser {
     const {
       evaluationId, ...params
     } = req.body;
-
+    const score = (Number(params.fit) + Number(params.harmony) + Number(params.fit) + Number(params.color) + Number(params.tpo)) / 5;
+    const grade = score >= 3.5 ? EvaluatingGrade.Good : EvaluatingGrade.Bad;
     await this.evaluationRepository.updateEvaluation({
-      ...params,
+      ...params, score, isEvaluated: true, evaluatedAt: new Date(), grade,
     }, evaluationId);
     const push = new PushEvaluationCompleted(new UserRepository());
     await push.execute(req.body.userId);
