@@ -18,20 +18,20 @@ class AuthController extends Controller {
   getRouter(): Router {
     const router = Router();
     router.get('/api/v1/auth/kakao', passport.authenticate('kakao'));
-    router.get('/api/v1/auth/kakao/callback', passport.authenticate('kakao'), this.kakaoCallback);
+    router.get('/api/v1/auth/kakao/callback', passport.authenticate('kakao'), this.callback);
     router.get('/api/v1/auth/naver', passport.authenticate('naver'));
-    router.get('/api/v1/auth/naver/callback', passport.authenticate('naver'));
+    router.get('/api/v1/auth/naver/callback', passport.authenticate('naver'), this.callback);
     router.post('/api/v1/auth/password', this.signIn);
     router.post('/api/v1/auth/reset', this.resetPassword);
     return router;
   }
 
-  kakaoCallback(req : Request, res : Response) {
+  callback(req : Request, res : Response) {
     const { user } = req;
     if (user?.exist) {
       res.status(StatusCode.Unauthorized).json({
         result: ResponseResult.Fail,
-        message: '카카오 로그인 성공했으나 회원정보가 존재하지 않아 회원가입을 진행합니다.',
+        message: '로그인 성공했으나 회원정보가 존재하지 않아 회원가입을 진행합니다.',
         data: {
           provider: user.provider,
           oAuthId: user.oAuthId,
