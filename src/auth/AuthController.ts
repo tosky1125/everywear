@@ -19,8 +19,8 @@ class AuthController extends Controller {
     const router = Router();
     router.get('/api/v1/auth/kakao', passport.authenticate('kakao'));
     router.get('/api/v1/auth/kakao/callback', passport.authenticate('kakao'), this.kakaoCallback);
-    router.get('/api/v1/auth/kakao', passport.authenticate('naver'));
-    router.get('/api/v1/auth/kakao/callback', passport.authenticate('naver'));
+    router.get('/api/v1/auth/naver', passport.authenticate('naver'));
+    router.get('/api/v1/auth/naver/callback', passport.authenticate('naver'));
     router.post('/api/v1/auth/password', this.signIn);
     router.post('/api/v1/auth/reset', this.resetPassword);
     return router;
