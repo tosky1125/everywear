@@ -1,6 +1,7 @@
 import passport from 'passport';
 import { Strategy as KakaoStrategy } from 'passport-kakao';
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
+import { Strategy as NaverStrategy } from 'passport-naver';
 import { QueryExecutor } from '../database/QueryExecutor';
 import { UserRepository } from '../../user/repository/UserRepository';
 import JwtTokenGenerator from './JwtGenerator';
@@ -18,7 +19,7 @@ passport.serializeUser((user, done) => { done(null, user); });
 passport.deserializeUser((user, done) => {
   done(null, user);
 });
-passport.use('naver', new KakaoStrategy({
+passport.use('naver', new NaverStrategy({
   clientID: '6MAo7EODEA9uoCSypc9T',
   clientSecret: 'a0VCOhPQRj',
   callbackURL: 'http://everyweardev-env.eba-azpdvh2m.ap-northeast-2.elasticbeanstalk.com/api/v1/auth/naver/callback',
