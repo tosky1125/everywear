@@ -32,11 +32,6 @@ function mimeTypeToExtension(mimeType:string): string {
 
 export class UploadFileService {
   async execute(request:Request) {
-    const { user } = request;
-    if (!user || !user.id) {
-      throw new UserNotExistError();
-    }
-
     if (!request.file) {
       throw new FileNotExistError();
     }
