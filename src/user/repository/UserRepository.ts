@@ -52,9 +52,9 @@ export class UserRepository extends AbstractUserRepository {
       chunk.birthday = new Date(chunk.birthday);
     }
     const rConn = QueryExecutor.getInstance().getReadConnection();
-    const [bodyTypeId] = await rConn('everywear_bodyType').select('bodyTypeId').where({ bodyType, gender });
-    const [faceTypeId] = await rConn('everywear_faceType').select('faceTypeId').where({ faceType });
-    const [skinTypeId] = await rConn('everywear_skinType').select('skinTypeId').where({ skinType });
+    const [bodyTypeId] = bodyType ? await rConn('everywear_bodyType').select('bodyTypeId').where({ bodyType, gender }) : [];
+    const [faceTypeId] = faceType ? await rConn('everywear_faceType').select('faceTypeId').where({ faceType }) : [];
+    const [skinTypeId] = skinType ? await rConn('everywear_skinType').select('skinTypeId').where({ skinType }) : [];
     const conn = QueryExecutor.getInstance().getWriteConnection();
     await conn('everywear_user').update({
       ...chunk, ...bodyTypeId, ...faceTypeId, ...skinTypeId,

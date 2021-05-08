@@ -12,7 +12,7 @@ export class CreateEvaluation {
 
   async execute(user:User, body) {
     const { imgUrl, purpose, deviceToken } = body;
-    const evaluation = new EvaluationRequest(user.id, imgUrl, purpose, false, 0, 0, 0, 0, 0);
+    const evaluation = new EvaluationRequest(0, user.id, imgUrl, purpose, false, 0, 0, 0, 0, 0);
     await this.evaluationRepository.createEvaluation(evaluation);
     await this.userRepository.update({ deviceToken }, user.id);
   }
