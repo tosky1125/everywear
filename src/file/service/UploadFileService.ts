@@ -74,7 +74,7 @@ export class UploadFileService {
 
     const conn = QueryExecutor.getInstance().getWriteConnection();
     const [queryResult] = await conn('everywear_upload_files').insert({
-      userId: user.id, // TODO: session 존재 시에는 userId 값이 들어 갈 수 있어야 함
+      userId: 0, // TODO: session 존재 시에는 userId 값이 들어 갈 수 있어야 함
       uploadDate: new Date(),
       fileUuid,
       fileUrl: uploadResult.Location,
