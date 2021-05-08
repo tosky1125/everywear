@@ -1,6 +1,5 @@
 import { OutingPurpose } from '../../infra/enum/OutingPurpose';
 import { EvaluatingGrade } from '../../infra/enum/EvaluatingGrade';
-import { IUpdateScore } from '../interface/UpdateScore';
 import { PointRangeError } from '../error/PointRangeError';
 
 export class EvaluationRequest {
@@ -32,7 +31,10 @@ export class EvaluationRequest {
 
   private _score: number;
 
+  private evaluationId: number;
+
   constructor(
+    evaluationId: number,
     userId : number,
     imgUrl : string,
     purpose : OutingPurpose,
@@ -46,6 +48,7 @@ export class EvaluationRequest {
     similarPerson?: string,
     comment?: string,
   ) {
+    this.evaluationId = evaluationId;
     this._similarImgUrl = similarImgUrl || null;
     this._similarPerson = similarPerson || null;
     this._comment = comment || null;

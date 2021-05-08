@@ -14,7 +14,6 @@ export class EvaluateUser {
     } = body;
 
     const evaluation = await this.evaluationRepository.getEvaluationById(evaluationId);
-    evaluation;
     await this.evaluationRepository.updateEvaluation({ ...params }, evaluationId);
     const push = new PushEvaluationCompleted(new UserRepository());
     await push.execute(body.userId);

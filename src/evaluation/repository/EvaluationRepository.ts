@@ -47,4 +47,4 @@ export class EvaluationRepository extends AbstractEvaluationRepository {
       score: data.score,
     });
   }
-}4;
+}
