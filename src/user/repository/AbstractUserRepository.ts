@@ -29,4 +29,8 @@ export abstract class AbstractUserRepository {
   abstract getDeviceToken(userId:number):Promise<string>;
 
   abstract checkMailIsVerbose(mail:string):Promise<any>;
+
+  abstract getAppleHistory(userId:number, reason: string):Promise<any>;
+
+  abstract setAppleHistory(id:number):Promise<void>;
 }

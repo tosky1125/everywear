@@ -73,7 +73,7 @@ export class UserRepository extends AbstractUserRepository {
     const [rows] = await conn('everywear_user').insert({
       ...chunk, ...bodyTypeId, ...faceTypeId, ...skinTypeId,
     });
-    await conn('everywear_apple').insert({ userId: rows, value: 2, reason: AppleValueCase.SignUp });
+    await conn('everywear_apple').insert({ userId: rows, value: 10, reason: AppleValueCase.SignUp });
     return rows;
   }
 
@@ -165,5 +165,16 @@ export class UserRepository extends AbstractUserRepository {
         User.userId = t1.userId
       `));
     return UserMapper.toService(rows);
+  }
+
+  async getAppleHistory(userId: number, reason: string) :Promise<any> {
+    const conn = QueryExecutor.getInstance().getReadConnection();
+    const [result] = await conn('everywear_apple').select().where({ userId, reason });
+    return result;
+  }
+
+  async setAppleHistory(id: number): Promise<void> {
+    const conn = QueryExecutor.getInstance().getReadConnection();
+    await conn('everywear_apple').update({ welcomeAlert: true }).where({ id });
   }
 }

@@ -21,6 +21,7 @@ import { UploadFileService } from '../file/service/UploadFileService';
 import { UpdateUserProfileImageService } from './service/UpdateUserProfileImageService';
 import { GetUserService } from './service/GetUserService';
 import { CheckMailIsVerbose } from './service/CheckMailIsVerbose';
+import { CheckWelcomeApple } from './service/CheckWelcomeApple';
 
 class UserController extends Controller {
   private upload = multer({ dest: 'tmp/' });
@@ -35,7 +36,26 @@ class UserController extends Controller {
     router.put('/api/v1/user/update', passport.authenticate('userStrategy1.0'), this.update);
     router.get('/api/v1/user', passport.authenticate('userStrategy1.0'), this.getUser);
     router.post('/api/v1/user/mail', this.mailCheck);
+    router.get('/api/v1/user/welcome/', passport.authenticate('userStrategy1.0'), this.checkWelcomeApple);
     return router;
+  }
+
+  async checkWelcomeApple(req:Request, res:Response): Promise<void> {
+    const service = new CheckWelcomeApple(new UserRepository());
+    try {
+      const result = await service.execute(req.user);
+      res.status(StatusCode.Ok).json({
+        result: ResponseResult.Success,
+        data: result,
+      });
+    } catch (e) {
+      Logger.error(e);
+      res.status(StatusCode.InternalServerError).json({
+        result: ResponseResult.Fail,
+        err: 'ERR_INTERNAL_SERVER',
+        message: '서버에러가 발생했습니다.',
+      });
+    }
   }
 
   async mailCheck(req:Request, res:Response) : Promise<void> {
