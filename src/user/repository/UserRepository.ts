@@ -174,7 +174,12 @@ export class UserRepository extends AbstractUserRepository {
   }
 
   async setAppleHistory(id: number): Promise<void> {
-    const conn = QueryExecutor.getInstance().getReadConnection();
+    const conn = QueryExecutor.getInstance().getWriteConnection();
     await conn('everywear_apple').update({ welcomeAlert: true }).where({ id });
+  }
+
+  async useApple(userId: number, amount: number): Promise<void> {
+    const conn = QueryExecutor.getInstance().getWriteConnection();
+    await conn('everywear_apple').decrement('value', amount).where({ userId });
   }
 }

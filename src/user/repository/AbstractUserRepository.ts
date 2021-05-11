@@ -33,4 +33,6 @@ export abstract class AbstractUserRepository {
   abstract getAppleHistory(userId:number, reason: string):Promise<any>;
 
   abstract setAppleHistory(id:number):Promise<void>;
+
+  abstract useApple(userId:number, amount:number) : Promise<void>;
 }
