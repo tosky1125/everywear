@@ -15,7 +15,7 @@ import { FileStreamError } from '../error/FileStreamError';
 import { FileDBInsertError } from '../error/FileDBInsertError';
 import { UserNotExistError } from '../../auth/error/UserNotExistError';
 
-const FileSizeLimit = 30 * 1024 * 1024;
+const FileSizeLimit = 50 * 1024 * 1024;
 
 function mimeTypeToExtension(mimeType:string): string {
   switch (mimeType) {
