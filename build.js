@@ -17,6 +17,10 @@ const ASSETS = [
     destination: path.resolve(__dirname, `${PATH_DIST}/.ebextensions`),
   },
   {
+    source: path.resolve(__dirname, './.platform'),
+    destination: path.resolve(__dirname, `${PATH_DIST}/.platform`),
+  },
+  {
     source: path.resolve(__dirname, './src/infra/firebase/asdfasd-250c0-firebase-adminsdk-k7nlj-4bf04bc284.json'),
     destination: path.resolve(__dirname, `${PATH_DIST}/infra/firebase/asdfasd-250c0-firebase-adminsdk-k7nlj-4bf04bc284.json`),
   },
