@@ -71,7 +71,7 @@ export class UserRepository extends AbstractUserRepository {
     const [skinTypeId] = await rConn('everywear_skinType').select('skinTypeId').where({ skinType });
     const conn = QueryExecutor.getInstance().getWriteConnection();
     const [rows] = await conn('everywear_user').insert({
-      ...chunk, ...bodyTypeId, ...faceTypeId, ...skinTypeId,
+      ...chunk, ...bodyTypeId, ...faceTypeId, ...skinTypeId, gender,
     });
     await conn('everywear_apple').insert({ userId: rows, value: 10, reason: AppleValueCase.SignUp });
     return rows;

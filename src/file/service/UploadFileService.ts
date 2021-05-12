@@ -37,9 +37,9 @@ export class UploadFileService {
         mimetype, path, originalname, size,
       } = request.file;
 
-      // if (size > FileSizeLimit) {
-      //   throw new InvalidFileSizeError();
-      // }
+      if (size > FileSizeLimit) {
+        throw new InvalidFileSizeError();
+      }
 
       if (!mimetype || !path || !originalname || !size) {
         throw new InvalidFileError();
