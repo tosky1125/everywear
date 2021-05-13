@@ -74,6 +74,7 @@ export class UserRepository extends AbstractUserRepository {
       ...chunk, ...bodyTypeId, ...faceTypeId, ...skinTypeId, gender,
     });
     await conn('everywear_apple').insert({ userId: rows, value: 10, reason: AppleValueCase.SignUp });
+    await conn('everywear_loginCount').insert({ userId: rows });
     return rows;
   }
 
