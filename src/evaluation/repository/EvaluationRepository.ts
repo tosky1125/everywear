@@ -47,4 +47,10 @@ export class EvaluationRepository extends AbstractEvaluationRepository {
       score: data.score,
     });
   }
+
+  async countEvaluations(): Promise<number> {
+    const conn = QueryExecutor.getInstance().getReadConnection();
+    const [rows] = await conn('everywear_evaluation').count('evaluationId as count');
+    return Number(rows.count);
+  }
 }

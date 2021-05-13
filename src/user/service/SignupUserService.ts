@@ -4,6 +4,7 @@ import { User } from '../domain/User';
 import JwtTokenGenerator from '../../infra/passport/JwtGenerator';
 import { UserSignResponseDto } from '../../auth/dto/UserSignResponseDto';
 import { SignUpUserExistError } from '../error/SignUpUserExistError';
+import { MailValidationError } from '../../auth/error/MailValidationError';
 
 export class SignupUserService {
   constructor(
@@ -16,7 +17,9 @@ export class SignupUserService {
     if (isExist) {
       throw new SignUpUserExistError();
     }
-
+    if (!data.mail.includes('@')) {
+      throw new MailValidationError();
+    }
     const result = await this.userRepository.signUp(data);
 
     const user = new User(

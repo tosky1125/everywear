@@ -22,6 +22,7 @@ import { UpdateUserProfileImageService } from './service/UpdateUserProfileImageS
 import { GetUserService } from './service/GetUserService';
 import { CheckMailIsVerbose } from './service/CheckMailIsVerbose';
 import { CheckWelcomeApple } from './service/CheckWelcomeApple';
+import { IncrementLoginCount } from './service/IncrementLoginCount';
 
 class UserController extends Controller {
   private upload = multer({ dest: 'tmp/' });
@@ -37,7 +38,25 @@ class UserController extends Controller {
     router.get('/api/v1/user', passport.authenticate('userStrategy1.0'), this.getUser);
     router.post('/api/v1/user/mail', this.mailCheck);
     router.get('/api/v1/user/welcome/', passport.authenticate('userStrategy1.0'), this.checkWelcomeApple);
+    router.put('/api/v1/user/count', passport.authenticate('userStrategy1.0'), this.incrementLoginCount);
     return router;
+  }
+
+  async incrementLoginCount(req:Request, res:Response): Promise<void> {
+    const service = new IncrementLoginCount(new UserRepository());
+    try {
+      await service.execute(req.user.id);
+      res.status(StatusCode.Ok).json({
+        result: ResponseResult.Success,
+      });
+    } catch (e) {
+      Logger.error(e);
+      res.status(StatusCode.InternalServerError).json({
+        result: ResponseResult.Fail,
+        err: 'ERR_INTERNAL_SERVER',
+        message: '서버에러가 발생했습니다.',
+      });
+    }
   }
 
   async checkWelcomeApple(req:Request, res:Response): Promise<void> {

@@ -182,4 +182,21 @@ export class UserRepository extends AbstractUserRepository {
     const conn = QueryExecutor.getInstance().getWriteConnection();
     await conn('everywear_apple').decrement('value', amount).where({ userId });
   }
+
+  async countUsers(): Promise<number> {
+    const conn = QueryExecutor.getInstance().getReadConnection();
+    const [rows] = await conn('everywear_user').count('userId as count');
+    return Number(rows.count);
+  }
+
+  async countLogin(): Promise<number> {
+    const conn = QueryExecutor.getInstance().getReadConnection();
+    const [rows] = await conn('everywear_loginCount').sum('loginCount');
+    return Number(rows['sum(`loginCount`)']);
+  }
+
+  async addLogin(userId: number): Promise<void> {
+    const conn = QueryExecutor.getInstance().getWriteConnection();
+    await conn('everywear_loginCount').increment('loginCount').where({ userId });
+  }
 }

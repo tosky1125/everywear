@@ -12,4 +12,6 @@ export abstract class AbstractEvaluationRepository {
   abstract updateEvaluation(params:any, evaluationId:number) : Promise<void>;
 
   abstract getEvaluationByUserId(userId: number): Promise<any>;
+
+  abstract countEvaluations(): Promise<number>;
 }

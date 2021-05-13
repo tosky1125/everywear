@@ -17,6 +17,10 @@ import { FileStreamError } from '../file/error/FileStreamError';
 import { InvalidFileError } from '../file/error/InvalidFileError';
 import { InvalidFileSizeError } from '../file/error/InvalidFileSizeError';
 import { InvalidMimeTypeError } from '../file/error/InvalidMimeTypeError';
+import { GetUserCount } from './service/GetUserCount';
+import { InternalServerError } from '../infra/error/InternalServerError';
+import { GetLoginCount } from './service/GetLoginCount';
+import { GetEvaluationCount } from './service/GetEvaluationCount';
 
 class AdminController extends Controller {
   private upload = multer({ dest: 'tmp/' });
@@ -26,8 +30,61 @@ class AdminController extends Controller {
     router.get('/api/v1/admin/evaluate', this.getUncompletedEvaluation);
     router.post('/api/v1/admin/evaluate/file', this.upload.single('file'), this.uploadFile);
     router.post('/api/v1/admin/evaluate', this.evaluateUser);
-    router.get('/api/shawn', this.pushTest);
+    router.get('/api/v1/admin/userCount', this.getUserCount);
+    router.get('/api/v1/admin/loginCount', this.getLoginCount);
+    router.get('/api/v1/admin/evaluationCount', this.getEvaluationCount);
     return router;
+  }
+
+  async getEvaluationCount(req:Request, res:Response) {
+    const service = new GetEvaluationCount(new EvaluationRepository());
+    try {
+      const data = await service.execute();
+      res.status(StatusCode.Ok).json({
+        result: ResponseResult.Success,
+        data,
+      });
+    } catch (e) {
+      Logger.error(e);
+      res.status(StatusCode.InternalServerError).json({
+        result: ResponseResult.Fail,
+        msg: new InternalServerError(e).message,
+      });
+    }
+  }
+
+  async getLoginCount(req:Request, res:Response) {
+    const service = new GetLoginCount(new UserRepository());
+    try {
+      const data = await service.execute();
+      res.status(StatusCode.Ok).json({
+        result: ResponseResult.Success,
+        data,
+      });
+    } catch (e) {
+      Logger.error(e);
+      res.status(StatusCode.InternalServerError).json({
+        result: ResponseResult.Fail,
+        msg: new InternalServerError(e).message,
+      });
+    }
+  }
+
+  async getUserCount(req:Request, res:Response) {
+    const service = new GetUserCount(new UserRepository());
+    try {
+      const data = await service.execute();
+      res.status(StatusCode.Ok).json({
+        result: ResponseResult.Success,
+        data,
+      });
+    } catch (e) {
+      Logger.error(e);
+      res.status(StatusCode.InternalServerError).json({
+        result: ResponseResult.Fail,
+        msg: new InternalServerError(e).message,
+      });
+    }
   }
 
   async uploadFile(req:Request, res:Response) {
